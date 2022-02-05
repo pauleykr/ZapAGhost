@@ -1,0 +1,58 @@
+/* CSS Document */
+body{
+	background-image: url("../img/spooky.jpg");
+	background-size:100% 150%;
+}
+html, body {
+	width: 700px;
+	margin: 0 auto;
+	font-size:20px;
+	color: #333;
+	font-family: san-serif;
+	}
+	
+h1 {
+	margin: 2px;
+	font-family: 'Nosifer Caps';
+	font-size:2em;
+	}
+	
+button {
+	font-size: 12px;
+	font-weight: bold;
+	padding: 8px; }
+	
+div#content {
+	padding: 20px;
+	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100;White+to+Transparent */
+background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
+ }
+	
+div#controls {
+	text-align: right; }
+	
+div#controls span {
+	font-weight: bold;
+	color: #333; }
+	
+div#controls button {
+	margin-left: 20px; }
+	
+div#timer {
+	display: none;
+	font-weight: bold; 
+	margin-left: 20px; 
+	color: rgb(255,0, 0); }
+	
+div#gamespace {
+	margin: 20px;
+	padding: 10px;
+	height: 400px;
+	background-color: rgba(0,0,0,.9);
+	border: 2px solid #CCC;
+	position: relative;}
+
+div#gamespace img { position: absolute; }

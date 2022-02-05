@@ -1,0 +1,120 @@
+
+<!-- 
+		Name: <Kristen>
+		Date: <12-12- 15>
+		Class: CSCI2447, Javascript Fundamentals
+		Project 7
+		use delay method
+ -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <title>Zap-A-Ghost &#128123;</title>
+    
+    <!-- CSS styles: This is for me to worry about; not you. -->
+	<link href="css/game.css" rel="stylesheet" />
+	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Nosifer+Caps" />
+	
+	<script src="js/jquery-1.11.3.min.js"></script>
+	<!--<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>--> 
+	<script>
+	var usrScore=0;
+	var timer=31;
+	var count=0;
+	
+$(document).ready( function() {
+
+$("#start_button").click(function(){
+    start();
+	addMole();
+	$("#gamespace").on('click', "img",function(){
+		addScore();
+		$(this).toggle( "explode");
+	});
+});
+});
+//generate mole's position
+function yPosition(){return Math.round(Math.random() *  300)+1};
+function xPosition(){return Math.round(Math.random() * 520)+1};
+
+//Generated when Mole appears
+function moleTime(){return Math.round(Math.random()*2000);}
+
+//increase player's score
+function addScore(){
+	usrScore+=1;
+	$("#score").html(usrScore + " points");
+	}
+function start(){
+$('#timer').show();
+changeColor();
+counter();
+$("button").off();	
+} 
+ 
+function counter(){
+
+if(timer>=0){
+t=setTimeout("counter()", 1000);
+$("#timer").html(timer + " seconds left");
+timer=timer-1;
+}
+else{
+alert("Game over! Your score was: "+ usrScore+ "pts");
+location.reload();
+}
+}
+function addMole(){
+ yPos=yPosition();
+ xPos=xPosition();
+ 
+ if(xPos>=500){
+ xPos=xPos-500;
+ }
+  t=setTimeout("addMole()", moleTime());
+$('#gamespace').append('<img id="image'+count+'" src="img/Ghost_One.png" style="top:'+yPos+'px;left:'+xPos+'px;"  />');
+ count++
+ removeGhost();
+}
+function removeGhost() {		
+			$("img").each(function(i, e){
+				  window.setTimeout(function() {
+					$(e).fadeOut();
+				  }, Math.random() * 3000);
+			});		
+		}
+
+function changeColor(){
+$("#gamespace").css("background-color","rgba(255,0,0,.5)");
+$("h1").css("color","rgb(255,0,0)");
+}
+	</script>
+    
+  </head>
+  <body>
+
+	<div id="content">
+
+		<h1>Ghost in the Machine</h1>
+		
+		<p>After clicking "start", you will have 30 seconds to zap
+		as many ghosts as you can. The ghosts appear randomly so be ready! </p>
+		
+		<div id="controls">
+			<span id="score">0 pts</span>
+			<button type="button" id="start_button">Start!</button>
+		</div>
+		
+		<div id="timer"></div>
+		
+		<div id="gamespace">
+
+			
+			
+		</div>
+		
+	</div>
+  </body>
+</html>

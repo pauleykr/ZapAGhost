@@ -1,14 +1,21 @@
 /* CSS Document */
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
 body{
 	background-image: url("../img/spooky.jpg");
-	background-size:100% 150%;
+	background-size: cover;
+	background-position: center;
+	background-attachment: fixed;
 }
 html, body {
-	width: 700px;
+	max-width: 700px;
+	width: 100%;
 	margin: 0 auto;
 	font-size:20px;
 	color: #333;
-	font-family: san-serif;
+	font-family: sans-serif;
 	}
 	
 h1 {
@@ -32,27 +39,57 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
  }
 	
 div#controls {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	gap: 12px;
 	text-align: right; }
-	
+
 div#controls span {
 	font-weight: bold;
 	color: #333; }
-	
+
 div#controls button {
-	margin-left: 20px; }
-	
+	margin-left: 0;
+	min-height: 44px; }
+
 div#timer {
 	display: none;
-	font-weight: bold; 
-	margin-left: 20px; 
+	font-weight: bold;
+	margin-left: 20px;
 	color: rgb(255,0, 0); }
-	
+
 div#gamespace {
-	margin: 20px;
+	margin: 20px 0;
 	padding: 10px;
-	height: 400px;
+	width: 100%;
+	height: clamp(220px, 55vw, 400px);
 	background-color: rgba(0,0,0,.9);
 	border: 2px solid #CCC;
-	position: relative;}
+	position: relative;
+	overflow: hidden;}
 
-div#gamespace img { position: absolute; }
+div#gamespace img {
+	position: absolute;
+	width: 60px;
+	height: auto; }
+
+@media (max-width: 480px) {
+	html, body {
+		font-size: 16px;
+	}
+	h1 {
+		font-size: 1.5em;
+	}
+	div#content {
+		padding: 12px;
+	}
+	div#controls {
+		justify-content: space-between;
+		width: 100%;
+	}
+	div#gamespace img {
+		width: 45px;
+	}
+}

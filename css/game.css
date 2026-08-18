@@ -8,10 +8,13 @@ body{
 	background-size: cover;
 	background-position: center;
 	background-attachment: fixed;
+	display: flex;
+	flex-direction: column;
 }
 html, body {
 	max-width: 700px;
 	width: 100%;
+	min-height: 100vh;
 	margin: 0 auto;
 	font-size:20px;
 	color: #333;
@@ -31,6 +34,9 @@ button {
 	
 div#content {
 	padding: 20px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
 	/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0+100;White+to+Transparent */
 background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%); /* FF3.6-15 */
 background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%); /* Chrome10-25,Safari5.1-6 */
@@ -38,6 +44,68 @@ background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-9 */
  }
 	
+div#difficulty {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-bottom: 12px;
+	font-weight: bold; }
+
+div#difficulty label {
+	font-weight: normal;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	padding: 4px 2px; }
+
+/* Spooky-themed custom radio buttons (shape + glow convey state, not color alone) */
+div#difficulty input[type="radio"] {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	width: 24px;
+	height: 24px;
+	margin: 0 8px 0 0;
+	flex-shrink: 0;
+	border: 2px solid #6b21a8;
+	border-radius: 50%;
+	background: #100a14;
+	position: relative;
+	cursor: pointer;
+	box-shadow: 0 0 4px rgba(107, 33, 168, .6);
+	transition: box-shadow .15s ease, border-color .15s ease, background-color .15s ease; }
+
+div#difficulty input[type="radio"]:hover {
+	border-color: #f97316; }
+
+div#difficulty input[type="radio"]:checked {
+	border-color: #f97316;
+	background: #1a0d1f;
+	box-shadow: 0 0 9px 2px rgba(249, 115, 22, .85); }
+
+div#difficulty input[type="radio"]:checked::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 10px;
+	height: 10px;
+	background: #f97316;
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	box-shadow: 0 0 6px 2px rgba(249, 115, 22, .9); }
+
+div#difficulty input[type="radio"]:focus-visible {
+	outline: 3px solid #22d3ee;
+	outline-offset: 2px; }
+
+div#difficulty input[type="radio"]:disabled {
+	opacity: .5;
+	cursor: not-allowed;
+	box-shadow: none; }
+
 div#controls {
 	display: flex;
 	align-items: center;
@@ -64,7 +132,8 @@ div#gamespace {
 	margin: 20px 0;
 	padding: 10px;
 	width: 100%;
-	height: clamp(220px, 55vw, 400px);
+	flex: 1;
+	min-height: clamp(220px, 55vw, 400px);
 	background-color: rgba(0,0,0,.9);
 	border: 2px solid #CCC;
 	position: relative;
@@ -85,9 +154,13 @@ div#gamespace img {
 	div#content {
 		padding: 12px;
 	}
+	div#difficulty,
 	div#controls {
 		justify-content: space-between;
 		width: 100%;
+	}
+	div#gamespace {
+		min-height: clamp(320px, 55vh, 600px);
 	}
 	div#gamespace img {
 		width: 45px;

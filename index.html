@@ -24,15 +24,28 @@
 	var usrScore=0;
 	var timer=31;
 	var count=0;
-	
+	var difficulty='medium';
+	var totalGhosts=40;
+	var spawnedCount=0;
+	var resolvedCount=0;
+	var ghostTimers={};
+	var gameEnded=false;
+	var counterTimeout;
+
+	var difficultySettings = {
+		easy:   { minSpawn: 250, maxSpawn: 550, minVisible: 2200, maxVisible: 3800 },
+		medium: { minSpawn: 200, maxSpawn: 450, minVisible: 1200, maxVisible: 3000 },
+		hard:   { minSpawn: 100, maxSpawn: 300, minVisible: 500,  maxVisible: 1200 }
+	};
+
 $(document).ready( function() {
 
 $("#start_button").click(function(){
+    difficulty = $('input[name="difficulty"]:checked').val();
     start();
 	addMole();
 	$("#gamespace").on('click', "img",function(){
-		addScore();
-		$(this).toggle( "explode");
+		resolveGhost($(this).attr('id'), true);
 	});
 });
 });
@@ -46,49 +59,104 @@ function xPosition(){
 	return Math.round(Math.random() * Math.max(maxX, 0)) + 1;
 }
 
-//Generated when Mole appears
-function moleTime(){return Math.round(Math.random()*2000);}
+//Generated when Mole appears, spawn rate depends on difficulty
+function moleTime(){
+	var s = difficultySettings[difficulty];
+	return Math.round(s.minSpawn + Math.random() * (s.maxSpawn - s.minSpawn));
+}
 
 //increase player's score
 function addScore(){
 	usrScore+=1;
-	$("#score").html(usrScore + " points");
+	$("#score").html(usrScore + " / " + totalGhosts + " pts");
 	}
 function start(){
+usrScore=0;
+timer=31;
+count=0;
+spawnedCount=0;
+resolvedCount=0;
+ghostTimers={};
+gameEnded=false;
+$("#score").html("0 / " + totalGhosts + " pts");
 $('#timer').show();
 changeColor();
 counter();
-$("button").off();	
-} 
- 
-function counter(){
+$("button").off();
+$('input[name="difficulty"]').prop('disabled', true);
+}
 
+function counter(){
+if(gameEnded){ return; }
 if(timer>=0){
-t=setTimeout("counter()", 1000);
+counterTimeout=setTimeout("counter()", 1000);
 $("#timer").html(timer + " seconds left");
 timer=timer-1;
 }
 else{
-alert("Game over! Your score was: "+ usrScore+ "pts");
-location.reload();
+endGame();
 }
 }
 function addMole(){
+if(gameEnded || spawnedCount>=totalGhosts){ return; }
  yPos=yPosition();
  xPos=xPosition();
+ var id='image'+count;
+ spawnedCount++;
 
-  t=setTimeout("addMole()", moleTime());
-$('#gamespace').append('<img id="image'+count+'" src="img/Ghost_One.png" style="top:'+yPos+'px;left:'+xPos+'px;"  />');
+ if(spawnedCount<totalGhosts){
+	 t=setTimeout("addMole()", moleTime());
+ }
+$('#gamespace').append('<img id="'+id+'" src="img/Ghost_One.png" alt="A ghost to zap" style="top:'+yPos+'px;left:'+xPos+'px;"  />');
  count++
- removeGhost();
+ removeGhost(id);
 }
-function removeGhost() {		
-			$("img").each(function(i, e){
-				  window.setTimeout(function() {
-					$(e).fadeOut();
-				  }, Math.random() * 3000);
-			});		
-		}
+function removeGhost(id) {
+	var s = difficultySettings[difficulty];
+	var visibleFor = s.minVisible + Math.random() * (s.maxVisible - s.minVisible);
+	ghostTimers[id] = window.setTimeout(function() {
+		resolveGhost(id, false);
+	}, visibleFor);
+}
+
+//a ghost is "resolved" once, whether it was clicked or it faded away unclicked
+function resolveGhost(id, wasClicked){
+	if(!ghostTimers.hasOwnProperty(id)){ return; }
+	clearTimeout(ghostTimers[id]);
+	delete ghostTimers[id];
+
+	var $ghost = $('#'+id);
+	if(wasClicked){
+		addScore();
+	}
+	$ghost.fadeOut(150, function(){ $(this).remove(); });
+
+	resolvedCount++;
+	if(resolvedCount>=totalGhosts){
+		endGame();
+	}
+}
+
+function endGame(){
+	if(gameEnded){ return; }
+	gameEnded=true;
+	clearTimeout(counterTimeout);
+	$('#timer').hide();
+
+	var half=Math.ceil(totalGhosts/2);
+	var message;
+	if(usrScore>=totalGhosts){
+		message="You're amazing! Have you considered a career in Ghost Hunting?";
+	}
+	else if(usrScore>=half){
+		message="Not too shabby!";
+	}
+	else{
+		message="Maybe don't quit your day job.";
+	}
+	alert(message + "\nYour score: " + usrScore + " / " + totalGhosts);
+	location.reload();
+}
 
 function changeColor(){
 $("#gamespace").css("background-color","rgba(255,0,0,.5)");
@@ -104,10 +172,17 @@ $("h1").css("color","rgb(255,0,0)");
 		<h1>Ghost in the Machine</h1>
 		
 		<p>After clicking "start", you will have 30 seconds to zap
-		as many ghosts as you can. The ghosts appear randomly so be ready! </p>
-		
+		as many of the 40 ghosts as you can. The ghosts appear randomly so be ready! </p>
+
+		<div id="difficulty">
+			<span>Difficulty:</span>
+			<label><input type="radio" name="difficulty" value="easy"> Easy</label>
+			<label><input type="radio" name="difficulty" value="medium" checked> Medium</label>
+			<label><input type="radio" name="difficulty" value="hard"> Hard</label>
+		</div>
+
 		<div id="controls">
-			<span id="score">0 pts</span>
+			<span id="score">0 / 40 pts</span>
 			<button type="button" id="start_button">Start!</button>
 		</div>
 		
